@@ -1,8 +1,8 @@
 import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut,
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
@@ -10,32 +10,37 @@ import { auth } from "../firebase";
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(false);
-  useEffect(() => {
-    const unsuscribe = onAuthStateChanged(auth, (user) => {
-      console.log("informacion del usuario: ");
-      console.log(user);
-      if (user) {
-        const { email, displayName, photoURL, uid } = user;
-        setUser({ email, displayName, photoURL, uid });
-      } else {
-        setUser(null);
-      }
-    });
-    return () => unsuscribe();
-  }, []);
+    const [user, setUser] = useState(false);
 
-  const registerUser = (email, password) =>
-    createUserWithEmailAndPassword(auth, email, password);
-  const loginUser = (email, password) =>
-    signInWithEmailAndPassword(auth, email, password);
-  const singOutUser = () => signOut(auth);
-  return (
-    <UserContext.Provider
-      value={{ user, setUser, registerUser, loginUser, singOutUser }}
-    >
-      {children}
-    </UserContext.Provider>
-  );
+    useEffect(() => {
+        const unsusbribe = onAuthStateChanged(auth, (user) => {
+            console.log(user);
+            if (user) {
+                const { email, photoURL, displayName, uid } = user;
+                setUser({ email, photoURL, displayName, uid });
+            } else {
+                setUser(null);
+            }
+        });
+
+        return () => unsusbribe();
+    }, []);
+
+    const registerUser = (email, password) =>
+        createUserWithEmailAndPassword(auth, email, password);
+
+    const loginUser = (email, password) =>
+        signInWithEmailAndPassword(auth, email, password);
+
+    const signOutUser = () => signOut(auth);
+
+    return (
+        <UserContext.Provider
+            value={{ user, setUser, registerUser, loginUser, signOutUser }}
+        >
+            {children}
+        </UserContext.Provider>
+    );
 };
+
 export default UserProvider;
