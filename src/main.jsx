@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import UserProvider from "./context/UserProvider.jsx";
 
+import "flowbite";
 createRoot(document.getElementById("root")).render(
   <UserProvider>
     <BrowserRouter>
@@ -11,3 +12,4 @@ createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </UserProvider>
 );
+
